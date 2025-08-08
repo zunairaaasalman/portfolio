@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import connectDB from "./database";
+import { MongoStorage, MemStorage } from "./storage";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +39,21 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Initialize storage (MongoDB or fallback to memory)
+  const mongoConnected = await connectDB();
+  let storage;
+  
+  if (mongoConnected) {
+    storage = new MongoStorage();
+    log("Using MongoDB storage");
+  } else {
+    storage = new MemStorage();
+    log("Using in-memory storage");
+  }
+  
+  // Make storage available to routes
+  (globalThis as any).storage = storage;
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

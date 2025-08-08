@@ -20,16 +20,17 @@ Preferred communication style: Simple, everyday language.
 
 ### Backend Architecture
 - **Express.js**: RESTful API server with middleware for JSON parsing and request logging
-- **Storage Interface**: Abstract storage interface (IStorage) with in-memory implementation (MemStorage)
+- **Storage Interface**: Abstract storage interface (IStorage) with MongoDB and in-memory implementations
 - **API Routes**: RESTful endpoints for project CRUD operations (/api/items)
 - **Schema Validation**: Zod schemas for request validation and type safety
 - **Error Handling**: Centralized error handling middleware
 
 ### Data Storage
-- **Database**: PostgreSQL configured with Drizzle ORM
-- **Schema**: Projects table with fields for title, description, technologies, URLs, status, and timestamps
-- **ORM**: Drizzle ORM for type-safe database operations and migrations
-- **Connection**: Neon Database serverless PostgreSQL connection
+- **Database**: MongoDB Atlas (preferred) with fallback to in-memory storage
+- **Schema**: Projects collection with fields for title, description, technologies, URLs, status, and timestamps
+- **ORM**: Mongoose for MongoDB operations and schema validation
+- **Connection**: Automatic fallback system - uses MongoDB Atlas if MONGODB_URI is available, otherwise in-memory storage
+- **Document Structure**: Uses MongoDB `_id` field for unique identification
 
 ### Development Setup
 - **Monorepo Structure**: Shared schema between client and server in `/shared` directory
@@ -47,10 +48,10 @@ Preferred communication style: Simple, everyday language.
 - **Utilities**: clsx and class-variance-authority for conditional styling
 
 ### Backend Dependencies
-- **Database**: @neondatabase/serverless for PostgreSQL connection
-- **ORM**: drizzle-orm and drizzle-kit for database operations and migrations
-- **Validation**: Zod for schema validation and drizzle-zod for ORM integration
+- **Database**: Mongoose for MongoDB operations and schema validation
+- **Validation**: Zod for schema validation with custom MongoDB-compatible schemas
 - **Development**: tsx for TypeScript execution and esbuild for production builds
+- **Storage**: Dual storage system supporting both MongoDB and in-memory fallback
 
 ### Development Tools
 - **Replit Integration**: Custom Vite plugins for Replit development environment

@@ -1,4 +1,5 @@
 import { type User, type InsertUser, type Project, type InsertProject } from "@shared/schema";
+import { ProjectModel } from "./models/Project";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -13,6 +14,98 @@ export interface IStorage {
   createProject(project: InsertProject): Promise<Project>;
   updateProject(id: string, project: Partial<InsertProject>): Promise<Project | undefined>;
   deleteProject(id: string): Promise<boolean>;
+}
+
+export class MongoStorage implements IStorage {
+  // User methods (placeholder for future implementation)
+  async getUser(id: string): Promise<User | undefined> {
+    // TODO: Implement user functionality when needed
+    return undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    // TODO: Implement user functionality when needed
+    return undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    // TODO: Implement user functionality when needed
+    throw new Error("User creation not implemented");
+  }
+
+  // Project methods
+  async getAllProjects(): Promise<Project[]> {
+    try {
+      const projects = await ProjectModel.find().sort({ createdAt: -1 }).lean();
+      return projects.map(project => ({
+        ...project,
+        _id: project._id.toString()
+      })) as Project[];
+    } catch (error) {
+      console.error("Error getting projects:", error);
+      return [];
+    }
+  }
+
+  async getProject(id: string): Promise<Project | undefined> {
+    try {
+      const project = await ProjectModel.findById(id).lean();
+      if (!project) return undefined;
+      
+      return {
+        ...project,
+        _id: project._id.toString()
+      } as Project;
+    } catch (error) {
+      console.error("Error getting project:", error);
+      return undefined;
+    }
+  }
+
+  async createProject(insertProject: InsertProject): Promise<Project> {
+    try {
+      const project = new ProjectModel(insertProject);
+      const savedProject = await project.save();
+      
+      return {
+        ...savedProject.toObject(),
+        _id: savedProject._id.toString()
+      } as Project;
+    } catch (error) {
+      console.error("Error creating project:", error);
+      throw error;
+    }
+  }
+
+  async updateProject(id: string, updateProject: Partial<InsertProject>): Promise<Project | undefined> {
+    try {
+      const updatedProject = await ProjectModel.findByIdAndUpdate(
+        id,
+        { ...updateProject, updatedAt: new Date() },
+        { new: true, lean: true }
+      );
+      
+      if (!updatedProject) return undefined;
+      
+      return {
+        ...updatedProject,
+        _id: updatedProject._id.toString()
+      } as Project;
+    } catch (error) {
+      console.error("Error updating project:", error);
+      return undefined;
+    }
+  }
+
+  async deleteProject(id: string): Promise<boolean> {
+    try {
+      const result = await ProjectModel.findByIdAndDelete(id);
+      return !!result;
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      return false;
+    }
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -36,16 +129,17 @@ export class MemStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const _id = randomUUID();
+    const now = new Date();
+    const user: User = { ...insertUser, _id, createdAt: now, updatedAt: now };
+    this.users.set(_id, user);
     return user;
   }
 
   // Project methods
   async getAllProjects(): Promise<Project[]> {
     return Array.from(this.projects.values()).sort(
-      (a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }
 
@@ -54,15 +148,16 @@ export class MemStorage implements IStorage {
   }
 
   async createProject(insertProject: InsertProject): Promise<Project> {
-    const id = randomUUID();
+    const _id = randomUUID();
     const now = new Date();
     const project: Project = { 
-      ...insertProject, 
-      id, 
+      ...insertProject,
+      _id, 
       createdAt: now, 
-      updatedAt: now 
+      updatedAt: now,
+      status: insertProject.status || "planning"
     };
-    this.projects.set(id, project);
+    this.projects.set(_id, project);
     return project;
   }
 
@@ -87,4 +182,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Export storage instance - will use MongoDB if available, otherwise fallback to memory
+export let storage: IStorage;

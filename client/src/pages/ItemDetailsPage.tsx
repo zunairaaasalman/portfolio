@@ -81,7 +81,7 @@ export default function ItemDetailsPage() {
 
   const confirmDelete = () => {
     if (project) {
-      deleteProjectMutation.mutate(project.id);
+      deleteProjectMutation.mutate(project._id);
     }
   };
 
@@ -156,12 +156,12 @@ export default function ItemDetailsPage() {
                     {getStatusLabel(project.status)}
                   </span>
                   <span className="text-slate-500 text-sm" data-testid="text-project-created">
-                    Created {formatDate(project.createdAt!)}
+                    Created {formatDate(project.createdAt)}
                   </span>
                 </div>
               </div>
               <div className="flex space-x-2">
-                <Link href={`/edit-item/${project.id}`}>
+                <Link href={`/edit-item/${project._id}`}>
                   <button className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors" data-testid="button-edit-project">
                     <Edit className="mr-2 h-4 w-4" />
                     Edit
@@ -239,13 +239,13 @@ export default function ItemDetailsPage() {
             <div>
               <p className="text-sm font-medium text-slate-600 mb-1">Project ID</p>
               <p className="text-slate-900" data-testid="text-project-id">
-                {project.id}
+                {project._id}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium text-slate-600 mb-1">Last Updated</p>
               <p className="text-slate-900" data-testid="text-project-updated">
-                {formatDate(project.updatedAt!)}
+                {formatDate(project.updatedAt)}
               </p>
             </div>
             <div>
@@ -260,7 +260,7 @@ export default function ItemDetailsPage() {
             <div>
               <p className="text-sm font-medium text-slate-600 mb-1">Created On</p>
               <p className="text-slate-900" data-testid="text-project-created-full">
-                {formatDate(project.createdAt!)}
+                {formatDate(project.createdAt)}
               </p>
             </div>
           </div>

@@ -21,37 +21,34 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="flex space-x-6">
-            <Link href="/">
-              <a
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive("/")
-                    ? "text-slate-900"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-                data-testid="nav-home"
-              >
-                Home
-              </a>
+            <Link
+              href="/"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive("/")
+                  ? "text-slate-900"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+              data-testid="nav-home"
+            >
+              Home
             </Link>
-            <Link href="/items">
-              <a
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive("/items")
-                    ? "text-slate-900"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-                data-testid="nav-projects"
-              >
-                Projects
-              </a>
+            <Link
+              href="/items"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive("/items")
+                  ? "text-slate-900"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+              data-testid="nav-projects"
+            >
+              Projects
             </Link>
-            <Link href="/add-item">
-              <a
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                data-testid="nav-add-project"
-              >
-                Add Project
-              </a>
+            <Link
+              href="/add-item"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              data-testid="nav-add-project"
+            >
+              Add Project
             </Link>
           </div>
         </div>

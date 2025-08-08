@@ -83,7 +83,7 @@ export default function ViewItemsPage() {
 
   const confirmDelete = () => {
     if (projectToDelete) {
-      deleteProjectMutation.mutate(projectToDelete.id);
+      deleteProjectMutation.mutate(projectToDelete._id);
     }
   };
 
@@ -164,31 +164,31 @@ export default function ViewItemsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((project) => (
             <div
-              key={project.id}
+              key={project._id}
               className="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-shadow"
-              data-testid={`card-project-${project.id}`}
+              data-testid={`card-project-${project._id}`}
             >
               {project.imageUrl && (
                 <img
                   src={project.imageUrl}
                   alt={project.title}
                   className="w-full h-48 object-cover"
-                  data-testid={`img-project-${project.id}`}
+                  data-testid={`img-project-${project._id}`}
                 />
               )}
               <div className="p-6">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-semibold text-slate-900" data-testid={`text-project-title-${project.id}`}>
+                  <h3 className="text-lg font-semibold text-slate-900" data-testid={`text-project-title-${project._id}`}>
                     {project.title}
                   </h3>
                   <span
                     className={`px-2 py-1 text-xs rounded-full font-medium ${getStatusColor(project.status)}`}
-                    data-testid={`status-project-${project.id}`}
+                    data-testid={`status-project-${project._id}`}
                   >
                     {getStatusLabel(project.status)}
                   </span>
                 </div>
-                <p className="text-slate-600 text-sm mb-4" data-testid={`text-project-description-${project.id}`}>
+                <p className="text-slate-600 text-sm mb-4" data-testid={`text-project-description-${project._id}`}>
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -196,7 +196,7 @@ export default function ViewItemsPage() {
                     <span
                       key={index}
                       className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
-                      data-testid={`tag-tech-${project.id}-${index}`}
+                      data-testid={`tag-tech-${project._id}-${index}`}
                     >
                       {tech.trim()}
                     </span>
@@ -204,14 +204,14 @@ export default function ViewItemsPage() {
                 </div>
                 <div className="flex justify-between items-center">
                   <div className="flex space-x-2">
-                    <Link href={`/items/${project.id}`}>
-                      <button className="text-blue-600 hover:text-blue-800 text-sm font-medium" data-testid={`button-view-${project.id}`}>
+                    <Link href={`/items/${project._id}`}>
+                      <button className="text-blue-600 hover:text-blue-800 text-sm font-medium" data-testid={`button-view-${project._id}`}>
                         <Eye className="inline mr-1 h-3 w-3" />
                         View
                       </button>
                     </Link>
-                    <Link href={`/edit-item/${project.id}`}>
-                      <button className="text-slate-600 hover:text-slate-800 text-sm font-medium" data-testid={`button-edit-${project.id}`}>
+                    <Link href={`/edit-item/${project._id}`}>
+                      <button className="text-slate-600 hover:text-slate-800 text-sm font-medium" data-testid={`button-edit-${project._id}`}>
                         <Edit className="inline mr-1 h-3 w-3" />
                         Edit
                       </button>
@@ -219,14 +219,14 @@ export default function ViewItemsPage() {
                     <button
                       onClick={() => handleDeleteProject(project)}
                       className="text-red-600 hover:text-red-800 text-sm font-medium"
-                      data-testid={`button-delete-${project.id}`}
+                      data-testid={`button-delete-${project._id}`}
                     >
                       <Trash2 className="inline mr-1 h-3 w-3" />
                       Delete
                     </button>
                   </div>
-                  <span className="text-xs text-slate-500" data-testid={`text-project-date-${project.id}`}>
-                    {formatDate(project.createdAt!)}
+                  <span className="text-xs text-slate-500" data-testid={`text-project-date-${project._id}`}>
+                    {formatDate(project.createdAt)}
                   </span>
                 </div>
               </div>
