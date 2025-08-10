@@ -123,6 +123,11 @@ Make sure to set your `MONGODB_URI` environment variable in your deployment plat
 4. Test thoroughly
 5. Submit a pull request
 
+## Developed by
+
+1. Zunaira Suleman
+2. Sheikh Rehan
+
 ## License
 
 This project is open source and available under the MIT License.
